@@ -140,6 +140,32 @@ void addProduct(std::vector<Product>& products) {  // Pass the vector by referen
     }
 }
 
+void viewCustomerByID(const std::vector<Customer>& customers) {
+    std::string customerID;
+    std::cout << "Enter Customer ID: ";
+    std::cin >> customerID;
+
+    // Search for the customer in the vector
+    bool found = false;
+    for (const auto& customer : customers) {
+        if (customer.getCustomerID() == customerID) {
+            std::cout << "\n--- Customer Details ---\n";
+            std::cout << "Customer ID: " << customer.getCustomerID() << "\n";
+            std::cout << "Username: " << customer.getUserName() << "\n";
+            std::cout << "First Name: " << customer.getFirstName() << "\n";
+            std::cout << "Last Name: " << customer.getLastName() << "\n";
+            std::cout << "Age: " << customer.getAge() << "\n";
+            std::cout << "Credit Card Number: " << customer.getCreditCardNumber() << "\n";
+            std::cout << "Reward Points: " << customer.getRewardPoints() << "\n";
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        std::cout << "Customer ID not found.\n";
+    }
+}
 
 // Function to add dummy customers and products for testing purposes
 void addDummyData(std::vector<Customer>& customers, std::vector<Product>& products) {
@@ -179,7 +205,7 @@ int main() {
                 std::cout << "Shopping selected (not yet implemented).\n";
                 break;
             case 6:
-                std::cout << "View Customer by Customer ID selected (not yet implemented).\n";
+                viewCustomerByID(customers);
                 break;
             case 7:
                 std::cout << "Redeem Rewards selected (not yet implemented).\n";
