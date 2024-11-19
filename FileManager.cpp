@@ -2,6 +2,17 @@
 #include <fstream>
 #include <stdexcept>
 #include <sstream>
+#include <iostream>
+
+void FileManager::logTransaction(const std::string& transaction) {
+    std::ofstream logFile("transactions.txt", std::ios::app); // Open file in append mode
+    if (logFile.is_open()) {
+        logFile << transaction << std::endl; // Append the transaction
+        logFile.close();
+    } else {
+        std::cerr << "Error: Unable to open transactions.txt for writing." << std::endl;
+    }
+}
 
 // Save customers to file
 void FileManager::saveCustomers(const std::vector<Customer>& customers, const std::string& filename) {

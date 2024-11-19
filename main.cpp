@@ -1,6 +1,7 @@
 // main.cpp
 #include "Customer.h"
 #include "Product.h"
+#include "FileManager.h"
 #include <iostream>
 #include <limits>
 
@@ -167,6 +168,85 @@ void viewCustomerByID(const std::vector<Customer>& customers) {
     }
 }
 
+/**
+ * "Shopping functionality in menu system"
+ * 
+ * @param customers References registered customers.
+ * @param products References available products.
+ * @throws std::runtime_error if file operations fail.
+ */
+void shopping(std::vector<Customer>& customers, std::vector<Product>& products) {
+    std::string customerID;
+    std::cout << "Enter Customer ID: ";
+    std::cin >> customerID;
+
+    // Find customer
+    auto customerIt = std::find_if(customers.begin(), customers.end(),
+                                   [&customerID](const Customer& c) { return c.getCustomerID() == customerID; });
+    if (customerIt == customers.end()) {
+        std::cout << "Customer not found.\n";
+        return;
+    }
+
+    std::vector<std::pair<std::string, int>> cart;
+    double totalCost = 0.0;
+
+    while (true) {
+        // Display products
+        std::cout << "\nAvailable Products:\n";
+        for (const auto& product : products) {
+            std::cout << product.getProductID() << " - " << product.getProductName()
+                      << " ($" << product.getProductPrice()
+                      << "), Available: " << product.getProductInventory() << "\n";
+        }
+
+        // Select product
+        std::string productID;
+        int quantity;
+        std::cout << "Enter Product ID to purchase (or 'done' to finish): ";
+        std::cin >> productID;
+
+        if (productID == "done") break;
+
+        auto productIt = std::find_if(products.begin(), products.end(),
+                                      [&productID](const Product& p) { return p.getProductID() == productID; });
+
+        if (productIt == products.end()) {
+            std::cout << "Invalid Product ID. Try again.\n";
+            continue;
+        }
+
+        // Validate quantity
+        std::cout << "Enter quantity: ";
+        std::cin >> quantity;
+        if (quantity <= 0 || quantity > productIt->getProductInventory()) {
+            std::cout << "Invalid quantity.\n";
+            continue;
+        }
+
+        // Update cart and inventory
+        cart.emplace_back(productID, quantity);
+        totalCost += quantity * productIt->getProductPrice();
+        productIt->updateInventory(-quantity);
+    }
+
+    if (cart.empty()) {
+        std::cout << "No products selected.\n";
+        return;
+    }
+
+    // Calculate reward points
+    int rewardPoints = static_cast<int>(totalCost / 10); // Example: 1 point per $10 spent
+    customerIt->addRewardPoints(rewardPoints);
+
+    // Log transaction
+    FileManager::logTransaction(customerID, cart, totalCost, rewardPoints);
+
+    std::cout << "Purchase complete. Total: $" << totalCost
+              << ", Earned Rewards: " << rewardPoints << "\n";
+}
+
+
 // Function to add dummy customers and products for testing purposes
 void addDummyData(std::vector<Customer>& customers, std::vector<Product>& products) {
     // Add some dummy customers
@@ -202,7 +282,9 @@ int main() {
                 removeProduct(products);  // Pass the products vector to remove a product
                 break;
             case 5:
-                std::cout << "Shopping selected (not yet implemented).\n";
+                shopping(customers, products);
+                FileManager::saveCustomers(customers); // Persist updated customers
+                FileManager::saveProducts(products);   // Persist updated products
                 break;
             case 6:
                 viewCustomerByID(customers);

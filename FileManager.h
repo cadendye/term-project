@@ -8,6 +8,8 @@
 
 class FileManager {
 public:
+    static void logTransaction(const std::string& transaction);
+
     static void saveCustomers(const std::vector<Customer>& customers, const std::string& filename = "customers.txt");
     static std::vector<Customer> loadCustomers(const std::string& filename = "customers.txt");
 
