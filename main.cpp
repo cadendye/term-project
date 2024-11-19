@@ -1,4 +1,4 @@
-// main.cpp
+// Dyar Jankir, Caden Dye, Arthas Lee
 #include "Customer.h"
 #include "Product.h"
 #include "Gift.h"
@@ -6,6 +6,8 @@
 #include <iostream>
 #include <limits>
 #include <algorithm>
+#include <random>
+#include <set> // For tracking used IDs
 
 // Function to display the main menu and return the selected option
 int displayMenu() {
@@ -32,8 +34,7 @@ int displayMenu() {
     return choice;
 }
 
-// Placeholder function for customer registration (only option currently functional)
-void registerCustomer(std::vector<Customer>& customers) {  // Pass the vector by reference
+void registerCustomer(std::vector<Customer>& customers, std::set<std::string>& usedIDs) {
     std::string userName, firstName, lastName, creditCardNumber;
     int age, rewardPoints = 0;
 
@@ -48,18 +49,25 @@ void registerCustomer(std::vector<Customer>& customers) {  // Pass the vector by
     std::cout << "Enter credit card number (format: xxxx-xxxx-xxxx): ";
     std::cin >> creditCardNumber;
 
-    // Generate a sample unique customer ID (placeholder for now)
-    std::string customerID = "CustID0000000001";
+    // Generate unique Customer ID
+    std::string customerID;
+    do {
+        std::random_device rd; // Seed generator
+        std::mt19937 gen(rd()); // Random number generator
+        std::uniform_int_distribution<> dist(1000000000, 9999999999); // 10-digit numbers
+        customerID = "CustID" + std::to_string(dist(gen)); // Generate ID
+    } while (usedIDs.find(customerID) != usedIDs.end()); // Ensure uniqueness
+
+    usedIDs.insert(customerID); // Mark ID as used
 
     try {
         Customer newCustomer(customerID, userName, firstName, lastName, age, creditCardNumber, rewardPoints);
         std::cout << "Customer registered successfully.\n";
-        customers.push_back(newCustomer);  // Push the new customer into the passed vector
+        customers.push_back(newCustomer);
     } catch (const std::invalid_argument& e) {
         std::cerr << "Error: " << e.what() << "\n";
     }
 }
-
 // Function to remove a customer by customerID
 void removeCustomer(std::vector<Customer>& customers) {
     std::string customerID;
@@ -327,16 +335,6 @@ void shopping(std::vector<Customer>& customers, std::vector<Product>& products, 
 }
 
 // Function to add dummy customers and products for testing purposes
-void addDummyData(std::vector<Customer>& customers, std::vector<Product>& products) {
-    // Add some dummy customers
-    customers.push_back(Customer("CustID0000000001", "U111thomasmuller", "John", "Doe", 30, "1111-1111-1111", 100));
-    customers.push_back(Customer("CustID0000000002", "U222thomasmuller", "Jane", "Smith", 25, "2222-2222-2222", 150));
-
-    // Add some dummy products
-    products.push_back(Product("Prod00001", "Laptop", 999.99, 10));
-    products.push_back(Product("Prod00002", "Phone", 499.99, 25));
-}
-
 int main() {
     int choice;
     std::vector<Customer> customers;  // Create vector to store all customers
@@ -345,14 +343,14 @@ int main() {
     int pointsPerDollar = 10; // Default points per dollar
     std::vector<Gift> gifts; // Empty vector of gifts
 
-    addDummyData(customers, products);
+    std::set<std::string> usedIDs; 
 
     do {
         choice = displayMenu();
 
         switch (choice) {
             case 1:
-                registerCustomer(customers);
+                registerCustomer(customers, usedIDs);
                 break;
             case 2:
                 removeCustomer(customers);
