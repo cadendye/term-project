@@ -9,7 +9,11 @@
 #include <random>
 #include <set> // For tracking used IDs
 
-// Function to display the main menu and return the selected option
+/**
+ * @brief Displays the main menu for the Customer Reward System and returns the selected option.
+ * 
+ * @return int The selected menu option. Returns -1 if the input is not a valid integer.
+ */
 int displayMenu() {
     int choice;
     std::cout << "\n--- Customer Reward System Menu ---\n";
@@ -34,6 +38,12 @@ int displayMenu() {
     return choice;
 }
 
+/**
+ * @brief Registers a new customer by collecting input and generating a unique Customer ID.
+ * 
+ * @param customers A reference to the vector of Customer objects where the new customer will be added.
+ * @param usedIDs A reference to the set of used Customer IDs to ensure uniqueness.
+ */
 void registerCustomer(std::vector<Customer>& customers, std::set<std::string>& usedIDs) {
     std::string userName, firstName, lastName, creditCardNumber;
     int age, rewardPoints = 0;
@@ -68,7 +78,12 @@ void registerCustomer(std::vector<Customer>& customers, std::set<std::string>& u
         std::cerr << "Error: " << e.what() << "\n";
     }
 }
-// Function to remove a customer by customerID
+
+/**
+ * @brief Removes a customer by their Customer ID.
+ * 
+ * @param customers A reference to the vector of Customer objects from which the customer will be removed.
+ */
 void removeCustomer(std::vector<Customer>& customers) {
     std::string customerID;
     bool found = false;
@@ -91,7 +106,12 @@ void removeCustomer(std::vector<Customer>& customers) {
     }
 }
 
-// Function to remove a product by productID
+
+/**
+ * @brief Removes a product by its Product ID.
+ * 
+ * @param products A reference to the vector of Product objects from which the product will be removed.
+ */
 void removeProduct(std::vector<Product>& products) {
     std::string productID;
     bool found = false;
@@ -114,7 +134,12 @@ void removeProduct(std::vector<Product>& products) {
     }
 }
 
-// Function to add a new product to the inventory
+
+/**
+ * @brief Adds a new product to the inventory by collecting input and validating through the Product constructor.
+ * 
+ * @param products A reference to the vector of Product objects where the new product will be added.
+ */
 void addProduct(std::vector<Product>& products) {  // Pass the vector by reference
     std::string productID, productName;
     double productPrice;
@@ -150,6 +175,11 @@ void addProduct(std::vector<Product>& products) {  // Pass the vector by referen
     }
 }
 
+/**
+ * @brief Displays the details of a customer based on the provided Customer ID.
+ * 
+ * @param customers A constant reference to the vector of Customer objects to search.
+ */
 void viewCustomerByID(const std::vector<Customer>& customers) {
     std::string customerID;
     std::cout << "Enter Customer ID: ";
@@ -177,12 +207,24 @@ void viewCustomerByID(const std::vector<Customer>& customers) {
     }
 }
 
+
+/**
+ * @brief Sets the number of reward points awarded per dollar spent.
+ * 
+ * @param pointsPerDollar A reference to an integer where the number of points per dollar will be updated.
+ */
 void setPointsPerDollar(int& pointsPerDollar) {
     std::cout << "Enter the number of points awarded per dollar spent: ";
     std::cin >> pointsPerDollar;
     std::cout << "Points per dollar updated to: " << pointsPerDollar << "\n";
 }
 
+
+/**
+ * @brief Adds a new gift to the list of available gifts for redemption.
+ * 
+ * @param gifts A reference to the vector of Gift objects where the new gift will be added.
+ */
 void addGift(std::vector<Gift>& gifts) {
     std::string giftName;
     int requiredPoints;
@@ -198,6 +240,13 @@ void addGift(std::vector<Gift>& gifts) {
     std::cout << "Gift added: " << giftName << " (requires " << requiredPoints << " points).\n";
 }
 
+
+/**
+ * @brief Allows a customer to redeem a reward using their reward points.
+ * 
+ * @param customers A reference to the vector of Customer objects.
+ * @param gifts A reference to the vector of Gift objects available for redemption.
+ */
 void redeemReward(std::vector<Customer>& customers, std::vector<Gift>& gifts) {
     std::string customerID;
     std::cout << "Enter Customer ID: ";
@@ -254,6 +303,7 @@ void redeemReward(std::vector<Customer>& customers, std::vector<Gift>& gifts) {
         std::cout << "Insufficient reward points to redeem this gift.\n";
     }
 }
+
 
 /**
  * "Shopping functionality in menu system"
@@ -334,7 +384,6 @@ void shopping(std::vector<Customer>& customers, std::vector<Product>& products, 
               << ", Earned Rewards: " << rewardPoints << "\n";
 }
 
-// Function to add dummy customers and products for testing purposes
 int main() {
     int choice;
     std::vector<Customer> customers;  // Create vector to store all customers
@@ -363,8 +412,6 @@ int main() {
                 break;
             case 5:
                 shopping(customers, products, pointsPerDollar);
-                FileManager::saveCustomers(customers); // Persist updated customers
-                FileManager::saveProducts(products);   // Persist updated products
             case 6:
                 viewCustomerByID(customers);
                 break;
@@ -396,7 +443,9 @@ int main() {
                 break;
             }
             case 0:
-                std::cout << "Exiting program.\n";
+                std::cout << "Exiting program and saving data!.\n";
+                 FileManager::saveCustomers(customers); // Persist updated customers
+                FileManager::saveProducts(products);   // Persist updated products;
                 break;
             default:
                 std::cout << "Invalid option. Please try again.\n";
