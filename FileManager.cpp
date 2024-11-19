@@ -4,10 +4,19 @@
 #include <sstream>
 #include <iostream>
 
-void FileManager::logTransaction(const std::string& transaction) {
+void FileManager::logTransaction(const std::string& customerID,
+                                 const std::vector<std::pair<std::string, int>>& cart,
+                                 double totalCost,
+                                 int rewardPoints) {
     std::ofstream logFile("transactions.txt", std::ios::app); // Open file in append mode
     if (logFile.is_open()) {
-        logFile << transaction << std::endl; // Append the transaction
+        logFile << "Customer ID: " << customerID << "\n";
+        logFile << "Items Purchased:\n";
+        for (const auto& [productID, quantity] : cart) {
+            logFile << "  - Product ID: " << productID << ", Quantity: " << quantity << "\n";
+        }
+        logFile << "Total Cost: $" << totalCost << "\n";
+        logFile << "Reward Points Earned: " << rewardPoints << "\n\n";
         logFile.close();
     } else {
         std::cerr << "Error: Unable to open transactions.txt for writing." << std::endl;
