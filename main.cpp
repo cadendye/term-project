@@ -1,11 +1,11 @@
 // main.cpp
 #include "Customer.h"
 #include "Product.h"
+#include "Gift.h"
 #include "FileManager.h"
 #include <iostream>
 #include <limits>
-
-int x = 5;
+#include <algorithm>
 
 // Function to display the main menu and return the selected option
 int displayMenu() {
@@ -28,6 +28,7 @@ int displayMenu() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // discard invalid input
         return -1;  // return an invalid option if the input is not an integer
     }
+
     return choice;
 }
 
@@ -168,14 +169,93 @@ void viewCustomerByID(const std::vector<Customer>& customers) {
     }
 }
 
+void setPointsPerDollar(int& pointsPerDollar) {
+    std::cout << "Enter the number of points awarded per dollar spent: ";
+    std::cin >> pointsPerDollar;
+    std::cout << "Points per dollar updated to: " << pointsPerDollar << "\n";
+}
+
+void addGift(std::vector<Gift>& gifts) {
+    std::string giftName;
+    int requiredPoints;
+
+    std::cout << "Enter gift name: ";
+    std::cin.ignore(); // Clear the input buffer
+    std::getline(std::cin, giftName);
+
+    std::cout << "Enter points required to redeem this gift: ";
+    std::cin >> requiredPoints;
+
+    gifts.emplace_back(giftName, requiredPoints);
+    std::cout << "Gift added: " << giftName << " (requires " << requiredPoints << " points).\n";
+}
+
+void redeemReward(std::vector<Customer>& customers, std::vector<Gift>& gifts) {
+    std::string customerID;
+    std::cout << "Enter Customer ID: ";
+    std::cin >> customerID;
+
+    // Find the customer
+    auto it = std::find_if(customers.begin(), customers.end(), [&](const Customer& c) {
+        return c.getCustomerID() == customerID;
+    });
+
+    if (it == customers.end()) {
+        std::cout << "Customer ID not found.\n";
+        return;
+    }
+
+    Customer& customer = *it;
+
+    // Display available gifts
+    if (gifts.empty()) {
+        std::cout << "No gifts available for redemption.\n";
+        return;
+    }
+
+    std::cout << "\n--- Available Gifts ---\n";
+    for (size_t i = 0; i < gifts.size(); ++i) {
+        std::cout << i + 1 << ". " << gifts[i].getGiftName()
+                  << " (requires " << gifts[i].getRequiredPoints() << " points)\n";
+    }
+
+    // Display customer's points
+    std::cout << "\nYou have " << customer.getRewardPoints() << " reward points.\n";
+
+    // Select a gift
+    int choice;
+    std::cout << "Enter the number of the gift to redeem (0 to cancel): ";
+    std::cin >> choice;
+
+    if (choice == 0) {
+        std::cout << "Redemption canceled.\n";
+        return;
+    }
+
+    if (choice < 1 || choice > static_cast<int>(gifts.size())) {
+        std::cout << "Invalid choice.\n";
+        return;
+    }
+
+    const Gift& selectedGift = gifts[choice - 1];
+    if (customer.getRewardPoints() >= selectedGift.getRequiredPoints()) {
+        customer.addRewardPoints(-selectedGift.getRequiredPoints());
+        std::cout << "Successfully redeemed: " << selectedGift.getGiftName() << "\n";
+        std::cout << "Remaining points: " << customer.getRewardPoints() << "\n";
+    } else {
+        std::cout << "Insufficient reward points to redeem this gift.\n";
+    }
+}
+
 /**
  * "Shopping functionality in menu system"
  * 
  * @param customers References registered customers.
  * @param products References available products.
+ * @param pointsPerDollar The number of reward points earned per dollar spent.
  * @throws std::runtime_error if file operations fail.
  */
-void shopping(std::vector<Customer>& customers, std::vector<Product>& products) {
+void shopping(std::vector<Customer>& customers, std::vector<Product>& products, double pointsPerDollar) {
     std::string customerID;
     std::cout << "Enter Customer ID: ";
     std::cin >> customerID;
@@ -235,8 +315,8 @@ void shopping(std::vector<Customer>& customers, std::vector<Product>& products) 
         return;
     }
 
-    // Calculate reward points
-    int rewardPoints = static_cast<int>(totalCost / 10); // Example: 1 point per $10 spent
+    // Calculate reward points using pointsPerDollar
+    int rewardPoints = static_cast<int>(totalCost * pointsPerDollar); // Reward points based on pointsPerDollar
     customerIt->addRewardPoints(rewardPoints);
 
     // Log transaction
@@ -245,7 +325,6 @@ void shopping(std::vector<Customer>& customers, std::vector<Product>& products) 
     std::cout << "Purchase complete. Total: $" << totalCost
               << ", Earned Rewards: " << rewardPoints << "\n";
 }
-
 
 // Function to add dummy customers and products for testing purposes
 void addDummyData(std::vector<Customer>& customers, std::vector<Product>& products) {
@@ -262,6 +341,9 @@ int main() {
     int choice;
     std::vector<Customer> customers;  // Create vector to store all customers
     std::vector<Product> products;    // Create vector to store all products
+
+    int pointsPerDollar = 10; // Default points per dollar
+    std::vector<Gift> gifts; // Empty vector of gifts
 
     addDummyData(customers, products);
 
@@ -282,16 +364,39 @@ int main() {
                 removeProduct(products);  // Pass the products vector to remove a product
                 break;
             case 5:
-                shopping(customers, products);
+                shopping(customers, products, pointsPerDollar);
                 FileManager::saveCustomers(customers); // Persist updated customers
                 FileManager::saveProducts(products);   // Persist updated products
-                break;
             case 6:
                 viewCustomerByID(customers);
                 break;
-            case 7:
-                std::cout << "Redeem Rewards selected (not yet implemented).\n";
+            case 7: {
+                int subChoice;
+                std::cout << "\n--- Redeem Rewards Menu ---\n";
+                std::cout << "1. Set Points per Dollar\n";
+                std::cout << "2. Add Gift\n";
+                std::cout << "3. Redeem Reward\n";
+                std::cout << "0. Back to Main Menu\n";
+                std::cout << "Select an option: ";
+                std::cin >> subChoice;
+
+                switch (subChoice) {
+                    case 1:
+                        setPointsPerDollar(pointsPerDollar);
+                        break;
+                    case 2:
+                        addGift(gifts);
+                        break;
+                    case 3:
+                        redeemReward(customers, gifts);
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        std::cout << "Invalid option. Please try again.\n";
+                }
                 break;
+            }
             case 0:
                 std::cout << "Exiting program.\n";
                 break;
