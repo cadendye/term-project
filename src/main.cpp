@@ -34,6 +34,9 @@ int displayMenu() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // discard invalid input
         return -1;  // return an invalid option if the input is not an integer
     }
+    else {
+        // do nothing
+    }
 
     return choice;
 }
@@ -99,10 +102,16 @@ void removeCustomer(std::vector<Customer>& customers) {
             found = true;
             break;
         }
+        else {
+            // do nothing
+        }
     }
 
     if (!found) {
         std::cout << "Customer with ID " << customerID << " not found.\n";
+    }
+    else {
+        // do nothing
     }
 }
 
@@ -127,10 +136,16 @@ void removeProduct(std::vector<Product>& products) {
             found = true;
             break;
         }
+        else {
+            // do nothing
+        }
     }
 
     if (!found) {
         std::cout << "Product with ID " << productID << " not found.\n";
+    }
+    else {
+        // do nothing
     }
 }
 
@@ -200,10 +215,16 @@ void viewCustomerByID(const std::vector<Customer>& customers) {
             found = true;
             break;
         }
+        else {
+            // do nothing
+        }
     }
 
     if (!found) {
         std::cout << "Customer ID not found.\n";
+    }
+    else {
+        // do nothing
     }
 }
 
@@ -261,6 +282,9 @@ void redeemReward(std::vector<Customer>& customers, std::vector<Gift>& gifts) {
         std::cout << "Customer ID not found.\n";
         return;
     }
+    else {
+        // do nothing
+    }
 
     Customer& customer = *it;
 
@@ -268,6 +292,9 @@ void redeemReward(std::vector<Customer>& customers, std::vector<Gift>& gifts) {
     if (gifts.empty()) {
         std::cout << "No gifts available for redemption.\n";
         return;
+    }
+    else {
+        // do nothing
     }
 
     std::cout << "\n--- Available Gifts ---\n";
@@ -288,10 +315,16 @@ void redeemReward(std::vector<Customer>& customers, std::vector<Gift>& gifts) {
         std::cout << "Redemption canceled.\n";
         return;
     }
+    else {
+        // do nothing
+    }
 
     if (choice < 1 || choice > static_cast<int>(gifts.size())) {
         std::cout << "Invalid choice.\n";
         return;
+    }
+    else {
+        // do nothing
     }
 
     const Gift& selectedGift = gifts[choice - 1];
@@ -323,6 +356,9 @@ void shopping(std::vector<Customer>& customers, std::vector<Product>& products, 
         std::cout << "Customer not found.\n";
         return;
     }
+    else {
+        // do nothing
+    }
 
     std::vector<std::pair<std::string, int>> cart;
     double totalCost = 0.0;
@@ -332,6 +368,9 @@ void shopping(std::vector<Customer>& customers, std::vector<Product>& products, 
         std::string productID;
         std::cin >> productID;
         if (productID == "done") break;
+        else {
+            // do nothing
+        }
 
         auto productIt = find_if(products.begin(), products.end(),
                                  [&productID](const Product& p) { return p.getProductID() == productID; });
@@ -339,6 +378,9 @@ void shopping(std::vector<Customer>& customers, std::vector<Product>& products, 
         if (productIt == products.end()) {
             std::cout << "Invalid Product ID.\n";
             continue;
+        }
+        else {
+            // do nothing
         }
 
         int quantity;
@@ -348,6 +390,9 @@ void shopping(std::vector<Customer>& customers, std::vector<Product>& products, 
         if (quantity <= 0 || quantity > productIt->getProductInventory()) {
             std::cout << "Invalid quantity.\n";
             continue;
+        }
+        else {
+            // do nothing
         }
 
         productIt->updateInventory(-quantity);

@@ -22,6 +22,9 @@ Customer::Customer(const std::string& customerID, const std::string& userName, c
         !isAgeValid(age) || !isCreditCardValid(creditCardNumber)) {
         throw std::invalid_argument("Invalid customer data provided.");
     }
+    else {
+        // do nothing
+    }
     
     this->userName = userName;
     this->firstName = firstName;

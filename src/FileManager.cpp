@@ -35,6 +35,9 @@ void FileManager::logTransaction(const std::string& customerID,
 void FileManager::saveTransactions(const std::vector<Transaction>& transactions, const std::string& filename) {
     std::ofstream file(filename);
     if (!file.is_open()) throw std::runtime_error("Cannot open file for saving transactions.");
+    else {
+        // do nothing
+    }
 
 
     for (const auto& transaction : transactions) {
@@ -52,12 +55,18 @@ std::vector<Transaction> FileManager::loadTransactions(const std::string& filena
     if (!file.is_open()) {
         throw std::runtime_error("Error: Unable to open transactions.txt for loading.");
     }
+    else {
+        // do nothing
+    }
 
     std::vector<Transaction> transactions;
     std::string line;
 
     while (std::getline(file, line)) {
         if (line.empty()) continue;
+        else {
+            // do nothing
+        }
 
         // Read transaction fields
         std::string transactionID = line;
@@ -95,6 +104,9 @@ void FileManager::saveCustomers(const std::vector<Customer>& customers, const st
     if (!file.is_open()) {
         throw std::runtime_error("Failed to open file for saving customers.");
     }
+    else {
+        // do nothing
+    }
     for (const auto& customer : customers) {
         file << customer.getCustomerID() << "\n"
              << customer.getUserName() << "\n"
@@ -118,6 +130,9 @@ std::vector<Customer> FileManager::loadCustomers(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
         throw std::runtime_error("Failed to open file for loading customers.");
+    }
+    else {
+        // do nothing
     }
 
     std::vector<Customer> customers;
@@ -157,6 +172,9 @@ void FileManager::saveProducts(const std::vector<Product>& products, const std::
     if (!file.is_open()) {
         throw std::runtime_error("Failed to open file for saving products.");
     }
+    else {
+        // do nothing
+    }
     for (const auto& product : products) {
         file << product.getProductID() << "\n"
              << product.getProductName() << "\n"
@@ -177,6 +195,9 @@ std::vector<Product> FileManager::loadProducts(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
         throw std::runtime_error("Failed to open file for loading products.");
+    }
+    else {
+        // do nothing
     }
 
     std::vector<Product> products;

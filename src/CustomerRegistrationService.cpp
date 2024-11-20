@@ -1,3 +1,4 @@
+// Dyar Jankir, Caden Dye, Arthas Lee
 #include <string>
 #include <stdexcept>
 #include <random>
@@ -101,6 +102,9 @@ private:
             if (customers[i]->getUsername() == username) {
                 return false;
             }
+            else { 
+                // do nothing
+            }
         }
         return true;
     }
@@ -132,6 +136,9 @@ private:
         for (int i = 0; i < count; i++) {
             if (customers[i]->getCreditCard() == card) {
                 return false;
+            }
+            else {
+                // do nothing
             }
         }
         return true;
@@ -179,6 +186,9 @@ private:
                     isUnique = false;
                     break;
                 }
+                else {
+                    // do nothing
+                }
             }
         } while (!isUnique);
         
@@ -219,6 +229,9 @@ private:
         }
         else if (!isCreditCardUnique(creditCard)) {
             throw ValidationError("Credit card already registered");
+        }
+        else {
+            // do nothing
         }
     }
 
@@ -261,6 +274,9 @@ public:
         if (count == capacity) {
             expandCapacity();
         }
+        else {
+            // do nothing
+        }
 
         std::string customerId = generateCustomerId();
         
@@ -289,10 +305,16 @@ public:
                     customers[i]->setRewardPoints(points);
                     found = true;
                 }
+                else {
+                    // do nothing
+                }
             }
             
             if (!found) {
                 throw ValidationError("Customer not found");
+            }
+            else {
+                // do nothing
             }
         }
     }
@@ -306,6 +328,9 @@ public:
         for (int i = 0; i < count; i++) {
             if (customers[i]->getId() == customerId) {
                 return customers[i];
+            }
+            else {
+                // do nothing
             }
         }
         return nullptr;
@@ -330,10 +355,16 @@ public:
                 count--;
                 found = true;
             }
+            else {
+                // do nothing
+            }
         }
         
         if (!found) {
             throw ValidationError("Customer not found");
+        }
+        else {
+            // do nothing
         }
     }
 };

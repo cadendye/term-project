@@ -24,11 +24,17 @@ Product::Product(const std::string& productID, const std::string& productName, d
     if (!isProductIDValid(productID) || !isProductPriceValid(productPrice) || !isProductInventoryValid(productInventory)) {
         throw std::invalid_argument("Invalid product data provided.");
     }
+    else {
+        // do nothing
+    }
 
     // Check if the product ID is unique
     for (const auto& existingID : productIDs) {
         if (existingID == productID) {
             throw std::invalid_argument("Product ID must be unique.");
+        }
+        else {
+            // do nothing
         }
     }
     
@@ -75,6 +81,9 @@ void Product::updateInventory(int change) {
     productInventory += change;
     if (productInventory < 0) {
         productInventory = 0;  // Prevent negative inventory
+    }
+    else {
+        // do nothing
     }
 }
 
