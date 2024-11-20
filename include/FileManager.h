@@ -7,7 +7,6 @@
 #include "Customer.h"
 #include "Product.h"
 
-<<<<<<< HEAD
 struct Transaction {
     std::string transactionID;
     std::string customerID;
@@ -35,13 +34,6 @@ struct Transaction {
     void setRewardPoints(int points) { rewardPoints = points; }
 };
 
-class FileManager {
-public:
-    static void saveTransactions(const std::vector<Transaction>& transactions, const std::string& filename = "transactions.txt");
-    static std::vector<Transaction> loadTransactions(const std::string& filename = "transactions.txt");
-
-
-=======
 /**
  * @class FileManager
  * @brief Provides file management functionalities for logging transactions and saving/loading customer and product data.
@@ -56,7 +48,10 @@ public:
      * @param totalCost The total cost of the transaction.
      * @param rewardPoints The number of reward points earned from the transaction.
      */
->>>>>>> 35eed9c0d663255ecc1dce6e9048faace03fc9d7
+    static void saveTransactions(const std::vector<Transaction>& transactions, const std::string& filename = "transactions.txt");
+    static std::vector<Transaction> loadTransactions(const std::string& filename = "transactions.txt");
+
+
     static void logTransaction(const std::string& customerID, const std::vector<std::pair<std::string, int>>& cart, double totalCost, int rewardPoints);
 
     /**

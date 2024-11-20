@@ -82,6 +82,14 @@ std::vector<Transaction> FileManager::loadTransactions(const std::string& filena
 }
 
 // Save customers to file
+
+/**
+ * @brief Saves customer information to a file.
+ * 
+ * @param customers A vector of Customer objects to be saved.
+ * @param filename The name of the file where customer information will be saved.
+ * @throws std::runtime_error If the file cannot be opened for writing.
+ */
 void FileManager::saveCustomers(const std::vector<Customer>& customers, const std::string& filename) {
     std::ofstream file(filename);
     if (!file.is_open()) {

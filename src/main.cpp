@@ -302,10 +302,17 @@ void redeemReward(std::vector<Customer>& customers, std::vector<Gift>& gifts) {
     } else {
         std::cout << "Insufficient reward points to redeem this gift.\n";
     }
-}
+}    
 
-void shopping(std::vector<Customer>& customers, std::vector<Product>& products, int pointsPerDollar) {
-    
+/**
+ * "Shopping functionality in menu system"
+ * 
+ * @param customers References registered customers.
+ * @param products References available products.
+ * @param pointsPerDollar The number of reward points earned per dollar spent.
+ * @throws std::runtime_error if file operations fail.
+ */
+void shopping(std::vector<Customer>& customers, std::vector<Product>& products, double pointsPerDollar) {
     std::string customerID;
     std::cout << "Enter Customer ID: ";
     std::cin >> customerID;
@@ -398,6 +405,7 @@ int main() {
             case 5:
                 shopping(customers, products, pointsPerDollar); 
                 break;
+                shopping(customers, products, pointsPerDollar);
             case 6:
                 viewCustomerByID(customers);
                 break;
