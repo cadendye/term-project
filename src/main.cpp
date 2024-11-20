@@ -432,6 +432,33 @@ int main() {
 
     std::set<std::string> usedIDs; 
 
+    // Load saved data with error handling
+    try {
+        customers = FileManager::loadCustomers();
+        std::cout << "Successfully loaded " << customers.size() << " customers.\n";
+        
+        // Populate usedIDs set from loaded customers
+        for (const auto& customer : customers) {
+            usedIDs.insert(customer.getCustomerID());
+        }
+    } catch (const std::runtime_error& e) {
+        std::cout << "Note: " << e.what() << " Starting with empty customer list.\n";
+    }
+
+    try {
+        products = FileManager::loadProducts();
+        std::cout << "Successfully loaded " << products.size() << " products.\n";
+    } catch (const std::runtime_error& e) {
+        std::cout << "Note: " << e.what() << " Starting with empty product list.\n";
+    }
+
+    try {
+        transactions = FileManager::loadTransactions();
+        std::cout << "Successfully loaded " << transactions.size() << " transactions.\n";
+    } catch (const std::runtime_error& e) {
+        std::cout << "Note: " << e.what() << " Starting with empty transaction history.\n";
+    }
+
     do {
         choice = displayMenu();
 
