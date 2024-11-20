@@ -1,9 +1,18 @@
+// Dyar Jankir, Caden Dye, Arthas Lee
 #include "FileManager.h"
 #include <fstream>
 #include <stdexcept>
 #include <sstream>
 #include <iostream>
 
+/**
+ * @brief Logs a customer's transaction to a file.
+ * 
+ * @param customerID The unique identifier for the customer making the transaction.
+ * @param cart A vector of pairs, where each pair contains a product ID and the quantity of that product purchased.
+ * @param totalCost The total cost of the transaction.
+ * @param rewardPoints The number of reward points earned from the transaction.
+ */
 void FileManager::logTransaction(const std::string& customerID,
                                  const std::vector<std::pair<std::string, int>>& cart,
                                  double totalCost,
@@ -23,6 +32,7 @@ void FileManager::logTransaction(const std::string& customerID,
     }
 }
 
+<<<<<<< HEAD
 void FileManager::saveTransactions(const std::vector<Transaction>& transactions, const std::string& filename) {
     std::ofstream file(filename);
     if (!file.is_open()) throw std::runtime_error("Cannot open file for saving transactions.");
@@ -73,6 +83,16 @@ std::vector<Transaction> FileManager::loadTransactions(const std::string& filena
 }
 
 // Save customers to file
+=======
+
+/**
+ * @brief Saves customer information to a file.
+ * 
+ * @param customers A vector of Customer objects to be saved.
+ * @param filename The name of the file where customer information will be saved.
+ * @throws std::runtime_error If the file cannot be opened for writing.
+ */
+>>>>>>> 35eed9c0d663255ecc1dce6e9048faace03fc9d7
 void FileManager::saveCustomers(const std::vector<Customer>& customers, const std::string& filename) {
     std::ofstream file(filename);
     if (!file.is_open()) {
@@ -89,7 +109,14 @@ void FileManager::saveCustomers(const std::vector<Customer>& customers, const st
     }
 }
 
-// Load customers from file
+
+/**
+ * @brief Loads customer information from a file.
+ * 
+ * @param filename The name of the file from which customer information will be loaded.
+ * @return std::vector<Customer> A vector of Customer objects loaded from the file.
+ * @throws std::runtime_error If the file cannot be opened for reading or if there is an error parsing customer data.
+ */
 std::vector<Customer> FileManager::loadCustomers(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
@@ -120,7 +147,14 @@ std::vector<Customer> FileManager::loadCustomers(const std::string& filename) {
     return customers;
 }
 
-// Save products to file
+
+/**
+ * @brief Saves product information to a file.
+ * 
+ * @param products A vector of Product objects to be saved.
+ * @param filename The name of the file where product information will be saved.
+ * @throws std::runtime_error If the file cannot be opened for writing.
+ */
 void FileManager::saveProducts(const std::vector<Product>& products, const std::string& filename) {
     std::ofstream file(filename);
     if (!file.is_open()) {
@@ -134,7 +168,14 @@ void FileManager::saveProducts(const std::vector<Product>& products, const std::
     }
 }
 
-// Load products from file
+
+/**
+ * @brief Loads product information from a file.
+ * 
+ * @param filename The name of the file from which product information will be loaded.
+ * @return std::vector<Product> A vector of Product objects loaded from the file.
+ * @throws std::runtime_error If the file cannot be opened for reading or if there is an error parsing product data.
+ */
 std::vector<Product> FileManager::loadProducts(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
