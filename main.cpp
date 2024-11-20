@@ -304,21 +304,8 @@ void redeemReward(std::vector<Customer>& customers, std::vector<Gift>& gifts) {
     }
 }
 
-<<<<<<< HEAD
 void shopping(std::vector<Customer>& customers, std::vector<Product>& products, int pointsPerDollar) {
     
-=======
-
-/**
- * "Shopping functionality in menu system"
- * 
- * @param customers References registered customers.
- * @param products References available products.
- * @param pointsPerDollar The number of reward points earned per dollar spent.
- * @throws std::runtime_error if file operations fail.
- */
-void shopping(std::vector<Customer>& customers, std::vector<Product>& products, double pointsPerDollar) {
->>>>>>> 35eed9c0d663255ecc1dce6e9048faace03fc9d7
     std::string customerID;
     std::cout << "Enter Customer ID: ";
     std::cin >> customerID;
@@ -368,7 +355,6 @@ void shopping(std::vector<Customer>& customers, std::vector<Product>& products, 
     std::cout << "Total: $" << totalCost << ", Reward Points Earned: " << rewardPoints << "\n";
 }
 
-<<<<<<< HEAD
 
 // Function to add dummy customers and products for testing purposes
 void addDummyData(std::vector<Customer>& customers, std::vector<Product>& products) {
@@ -381,8 +367,6 @@ void addDummyData(std::vector<Customer>& customers, std::vector<Product>& produc
     products.push_back(Product("Prod00002", "Phone", 499.99, 25));
 }
 
-=======
->>>>>>> 35eed9c0d663255ecc1dce6e9048faace03fc9d7
 int main() {
     int choice;
     std::vector<Customer> customers;  // Create vector to store all customers
@@ -412,12 +396,8 @@ int main() {
                 removeProduct(products);  // Pass the products vector to remove a product
                 break;
             case 5:
-<<<<<<< HEAD
                 shopping(customers, products, pointsPerDollar); 
                 break;
-=======
-                shopping(customers, products, pointsPerDollar);
->>>>>>> 35eed9c0d663255ecc1dce6e9048faace03fc9d7
             case 6:
                 viewCustomerByID(customers);
                 break;
@@ -449,16 +429,10 @@ int main() {
                 break;
             }
             case 0:
-<<<<<<< HEAD
                 std::cout << "Saving files and exiting program.\n";
                 FileManager::saveTransactions(transactions);
                 FileManager::saveCustomers(customers); 
                 FileManager::saveProducts(products); 
-=======
-                std::cout << "Exiting program and saving data!.\n";
-                 FileManager::saveCustomers(customers); // Persist updated customers
-                FileManager::saveProducts(products);   // Persist updated products;
->>>>>>> 35eed9c0d663255ecc1dce6e9048faace03fc9d7
                 break;
             default:
                 std::cout << "Invalid option. Please try again.\n";

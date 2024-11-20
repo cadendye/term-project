@@ -32,7 +32,6 @@ void FileManager::logTransaction(const std::string& customerID,
     }
 }
 
-<<<<<<< HEAD
 void FileManager::saveTransactions(const std::vector<Transaction>& transactions, const std::string& filename) {
     std::ofstream file(filename);
     if (!file.is_open()) throw std::runtime_error("Cannot open file for saving transactions.");
@@ -83,16 +82,6 @@ std::vector<Transaction> FileManager::loadTransactions(const std::string& filena
 }
 
 // Save customers to file
-=======
-
-/**
- * @brief Saves customer information to a file.
- * 
- * @param customers A vector of Customer objects to be saved.
- * @param filename The name of the file where customer information will be saved.
- * @throws std::runtime_error If the file cannot be opened for writing.
- */
->>>>>>> 35eed9c0d663255ecc1dce6e9048faace03fc9d7
 void FileManager::saveCustomers(const std::vector<Customer>& customers, const std::string& filename) {
     std::ofstream file(filename);
     if (!file.is_open()) {
