@@ -247,22 +247,14 @@ void redeemReward(std::vector<Customer>& customers, std::vector<Gift>& gifts) {
     }
 }
 
-/**
- * "Shopping functionality in menu system"
- * 
- * @param customers References registered customers.
- * @param products References available products.
- * @param pointsPerDollar The number of reward points earned per dollar spent.
- * @throws std::runtime_error if file operations fail.
- */
-void shopping(std::vector<Customer>& customers, std::vector<Product>& products, double pointsPerDollar) {
+void shopping(std::vector<Customer>& customers, std::vector<Product>& products, int pointsPerDollar) {
+    
     std::string customerID;
     std::cout << "Enter Customer ID: ";
     std::cin >> customerID;
 
-    // Find customer
-    auto customerIt = std::find_if(customers.begin(), customers.end(),
-                                   [&customerID](const Customer& c) { return c.getCustomerID() == customerID; });
+    auto customerIt = find_if(customers.begin(), customers.end(),
+                              [&customerID](const Customer& c) { return c.getCustomerID() == customerID; });
     if (customerIt == customers.end()) {
         std::cout << "Customer not found.\n";
         return;
@@ -272,59 +264,40 @@ void shopping(std::vector<Customer>& customers, std::vector<Product>& products, 
     double totalCost = 0.0;
 
     while (true) {
-        // Display products
-        std::cout << "\nAvailable Products:\n";
-        for (const auto& product : products) {
-            std::cout << product.getProductID() << " - " << product.getProductName()
-                      << " ($" << product.getProductPrice()
-                      << "), Available: " << product.getProductInventory() << "\n";
-        }
-
-        // Select product
+        std::cout << "Enter Product ID (or 'done' to finish): ";
         std::string productID;
-        int quantity;
-        std::cout << "Enter Product ID to purchase (or 'done' to finish): ";
         std::cin >> productID;
-
         if (productID == "done") break;
 
-        auto productIt = std::find_if(products.begin(), products.end(),
-                                      [&productID](const Product& p) { return p.getProductID() == productID; });
+        auto productIt = find_if(products.begin(), products.end(),
+                                 [&productID](const Product& p) { return p.getProductID() == productID; });
 
         if (productIt == products.end()) {
-            std::cout << "Invalid Product ID. Try again.\n";
+            std::cout << "Invalid Product ID.\n";
             continue;
         }
 
-        // Validate quantity
-        std::cout << "Enter quantity: ";
+        int quantity;
+        std::cout << "Enter Quantity: ";
         std::cin >> quantity;
+
         if (quantity <= 0 || quantity > productIt->getProductInventory()) {
             std::cout << "Invalid quantity.\n";
             continue;
         }
 
-        // Update cart and inventory
-        cart.emplace_back(productID, quantity);
-        totalCost += quantity * productIt->getProductPrice();
         productIt->updateInventory(-quantity);
+        totalCost += productIt->getProductPrice() * quantity;
+        cart.emplace_back(productID, quantity);
     }
 
-    if (cart.empty()) {
-        std::cout << "No products selected.\n";
-        return;
-    }
-
-    // Calculate reward points using pointsPerDollar
-    int rewardPoints = static_cast<int>(totalCost * pointsPerDollar); // Reward points based on pointsPerDollar
+    int rewardPoints = static_cast<int>(totalCost * pointsPerDollar);
     customerIt->addRewardPoints(rewardPoints);
-
-    // Log transaction
     FileManager::logTransaction(customerID, cart, totalCost, rewardPoints);
 
-    std::cout << "Purchase complete. Total: $" << totalCost
-              << ", Earned Rewards: " << rewardPoints << "\n";
+    std::cout << "Total: $" << totalCost << ", Reward Points Earned: " << rewardPoints << "\n";
 }
+
 
 // Function to add dummy customers and products for testing purposes
 void addDummyData(std::vector<Customer>& customers, std::vector<Product>& products) {
@@ -341,6 +314,8 @@ int main() {
     int choice;
     std::vector<Customer> customers;  // Create vector to store all customers
     std::vector<Product> products;    // Create vector to store all products
+    std::vector<Transaction> transactions;
+
 
     int pointsPerDollar = 10; // Default points per dollar
     std::vector<Gift> gifts; // Empty vector of gifts
@@ -364,9 +339,8 @@ int main() {
                 removeProduct(products);  // Pass the products vector to remove a product
                 break;
             case 5:
-                shopping(customers, products, pointsPerDollar);
-                FileManager::saveCustomers(customers); // Persist updated customers
-                FileManager::saveProducts(products);   // Persist updated products
+                shopping(customers, products, pointsPerDollar); 
+                break;
             case 6:
                 viewCustomerByID(customers);
                 break;
@@ -398,7 +372,10 @@ int main() {
                 break;
             }
             case 0:
-                std::cout << "Exiting program.\n";
+                std::cout << "Saving files and exiting program.\n";
+                FileManager::saveTransactions(transactions);
+                FileManager::saveCustomers(customers); 
+                FileManager::saveProducts(products); 
                 break;
             default:
                 std::cout << "Invalid option. Please try again.\n";

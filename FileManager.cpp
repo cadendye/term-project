@@ -23,6 +23,55 @@ void FileManager::logTransaction(const std::string& customerID,
     }
 }
 
+void FileManager::saveTransactions(const std::vector<Transaction>& transactions, const std::string& filename) {
+    std::ofstream file(filename);
+    if (!file.is_open()) throw std::runtime_error("Cannot open file for saving transactions.");
+
+
+    for (const auto& transaction : transactions) {
+        file << transaction.getTransactionID() << "\n"
+             << transaction.getCustomerID() << "\n"
+             << transaction.getProductIDs() << "\n"
+             << transaction.getTotalAmount() << "\n"
+             << transaction.getRewardPoints() << "\n\n";
+    }
+    file.close();
+}
+
+std::vector<Transaction> FileManager::loadTransactions(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        throw std::runtime_error("Error: Unable to open transactions.txt for loading.");
+    }
+
+    std::vector<Transaction> transactions;
+    std::string line;
+
+    while (std::getline(file, line)) {
+        if (line.empty()) continue;
+
+        // Read transaction fields
+        std::string transactionID = line;
+        std::getline(file, line);
+        std::string customerID = line;
+        std::getline(file, line);
+        std::string productIDs = line;
+        std::getline(file, line);
+        double totalAmount = std::stod(line);
+        std::getline(file, line);
+        int rewardPoints = std::stoi(line);
+
+        // Create a Transaction object and add it to the vector
+        transactions.emplace_back(transactionID, customerID, productIDs, totalAmount, rewardPoints);
+
+        // Skip the blank line between transactions
+        std::getline(file, line);
+    }
+
+    file.close();
+    return transactions;
+}
+
 // Save customers to file
 void FileManager::saveCustomers(const std::vector<Customer>& customers, const std::string& filename) {
     std::ofstream file(filename);
