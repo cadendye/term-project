@@ -73,6 +73,7 @@ void registerCustomer(std::vector<Customer>& customers, std::set<std::string>& u
     try {
         Customer newCustomer(customerID, userName, firstName, lastName, age, creditCardNumber, rewardPoints);
         std::cout << "Customer registered successfully.\n";
+        std::cout << "CustomerID: " << customerID << ".\n";
         customers.push_back(newCustomer);
     } catch (const std::invalid_argument& e) {
         std::cerr << "Error: " << e.what() << "\n";
