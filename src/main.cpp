@@ -452,12 +452,6 @@ int main() {
         std::cout << "Note: " << e.what() << " Starting with empty product list.\n";
     }
 
-    try {
-        transactions = FileManager::loadTransactions();
-        std::cout << "Successfully loaded " << transactions.size() << " transactions.\n";
-    } catch (const std::runtime_error& e) {
-        std::cout << "Note: " << e.what() << " Starting with empty transaction history.\n";
-    }
 
     do {
         choice = displayMenu();

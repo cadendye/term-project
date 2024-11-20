@@ -139,6 +139,10 @@ std::vector<Customer> FileManager::loadCustomers(const std::string& filename) {
     std::string customerID, userName, firstName, lastName, ageStr, creditCardNumber, rewardPointsStr;
 
     while (std::getline(file, customerID)) {
+        if (customerID.empty()) continue;
+        else {
+            // do nothing
+        }
         std::getline(file, userName);
         std::getline(file, firstName);
         std::getline(file, lastName);
@@ -204,6 +208,10 @@ std::vector<Product> FileManager::loadProducts(const std::string& filename) {
     std::string productID, productName, productPriceStr, productInventoryStr;
 
     while (std::getline(file, productID)) {
+        if (productID.empty()) continue;
+        else {
+            // do nothing
+        }
         std::getline(file, productName);
         std::getline(file, productPriceStr);
         std::getline(file, productInventoryStr);
